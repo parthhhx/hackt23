@@ -1,0 +1,196 @@
+#include<stdio.h>
+
+int checksorted(int *X,int sX);                     //Function declaration
+void combine(int *X, int *Y, int sX, int sY);       //Function declaration
+
+int main()
+{
+    int sizea,sizeb,check1,check2;                  //variables assigning
+    
+    printf("Enter the size of array a : ");         //It is assumed that the user enters a size > 0 as an array cannot have negative size
+    scanf("%d",&sizea);
+
+    int A[sizea];                                   //Array A
+    starta:
+    for(int i=0;i<sizea;i++)
+    {
+        printf("Enter integer no-%d : ",i+1);        //Filling the array by elements
+        scanf("%d",&A[i]);
+    }
+
+    check1 = checksorted(A, sizea);                  //Function calling
+
+    if(check1==0)                                   //To show error if the array is not strictly increasing
+    {
+        printf("Enter the elements in correct increasing order\n");
+        goto starta;
+    }
+
+
+    printf("Enter the size of array b : ");
+    scanf("%d",&sizeb);                               //It is assumed that the user enters a size > 0 as an array cannot have negative size
+
+    int B[sizeb];                                     //Array B
+
+    startb:
+    for(int i=0;i<sizeb;i++)
+    {
+        printf("Enter integer no-%d :",i+1);            //Filling tme array by elements
+        scanf("%d",&B[i]);
+    }
+
+    check2 = checksorted(B, sizeb);                     //Function calling
+
+    if(check2==0)                                       //To show error if the array is not strictly increasing
+    {
+        printf("Enter the elements in correct increasing order \n");
+        goto startb;
+    }
+
+    combine (A,B,sizea,sizeb);                         //Function calling
+  
+    return 0;
+}
+
+int checksorted(int *X,int sX)                          //Fucntion defination
+{   
+    for(int i=0;i<sX;i++)
+    {
+        if(X[i]>=X[i+1])                                //If ith element is greater than (i+1)th element then its not strictly increasing and we output 0 in that case
+        {
+            return 0;
+        }
+    }
+    return 1;                                           //Otherwise 1 is outputed
+}
+
+void combine(int *X, int *Y, int sX, int sY)            //Fucntion defination
+{   
+    int m = 0;
+    int count1 = 0;
+    int count2 = 0;
+    int c,d;
+
+    if (sX >= sY)
+    {
+        for (int i = 0; i < sY; i++)                    //Checking for common elements in both the arrays and storing it in variable c
+        {
+            for (int j = 0; j < sX; j++)
+            {
+                if (Y[i] == X[j])
+                {
+                    X[j] = c;
+                }
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < sX; i++)                     //Checking for common elements in both the arrays and storing it in variable d
+        {
+            for (int j = 0; j < sY; j++)
+            {
+                if (X[j] == Y[i])
+                {
+                    Y[j] = d;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < sY; i++)                        //Counting the no of common elemnets
+    {
+        if (Y[i] == d)
+        {
+            count2++;
+        }
+    }
+    
+
+    for (int i = 0; i < sX; i++)                        //Counting the no of common elemnets
+    {
+        if (X[i] == c)
+        {
+            count1++;
+        }
+    }
+    
+
+    int C[sX + sY -count1 -count2];                     //To limit the size of array so it doesnt show any garbage value
+
+    if (sX >= sY)
+    {
+        for (int i = 0; i < sY; i++)                    //Filling the array C
+        {
+            C[i] = Y[i];
+                m++;
+        }
+        for (int i = 0; i < sX; i++)
+        {
+            if (X[i] != c)
+            {           
+                C[m] = X[i];
+                    m++;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < sX; i++)                    //Filling the array C
+        {
+            C[i] = X[i];
+                m++;
+        }
+
+
+        for (int i = 0; i < sY; i++)
+        {
+            if (Y[i] != d)
+            {            
+                C[m] = Y[i];
+                   m++;
+            }
+        }
+    }
+
+    for (int i = 0; i < (sX + sY -count1 - count2);i++)
+    {
+        for (int r = i + 1; r < (sX + sY -count1 -count2);r++)
+        {
+            if (C[r] < C[i])
+            {
+                int var;
+                
+                var = C[i];                                    //Swapping
+                C[i] = C[r];
+                C[r] = var;
+            }
+        }
+    }
+    
+    int check3 = checksorted(C,(sX + sY -count1 -count2));
+
+    if(check3==1)
+    {
+    
+    printf("The Final array C: ");
+
+    for (int i = 0; i < (sX + sY -count1 -count2);i++)
+    {
+        printf("%d  ", C[i]);                                   //Printing the final array
+    }
+    }
+    else
+    {
+         printf("The Final array C: ");
+
+    for (int i = 0; i < (sX + sY -count1 -count2);i++)
+    {
+        printf("%d  ", C[i]);                                   //Other condition for the array
+    }
+        printf("is sorted");
+    }
+   
+}
+
+
